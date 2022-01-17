@@ -1,4 +1,4 @@
-# ghibli_pal
+# Ghibli Pal
 
 A Studio Ghibli companion app made in Flutter
 
