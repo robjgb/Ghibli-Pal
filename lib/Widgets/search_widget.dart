@@ -34,8 +34,8 @@ class _SearchWidgetState extends State<SearchWidget> {
         color: Colors.white,
         boxShadow: <BoxShadow>[
           BoxShadow(
-            color: Colors.grey.shade400,
-            offset: const Offset(-6, -6),
+            color: Colors.grey.shade200,
+            offset: const Offset(-5, -5),
             blurRadius: 16,
           ),
           BoxShadow(
