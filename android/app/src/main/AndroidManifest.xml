@@ -1,5 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.ghibli_pal">
+    <uses-permission android:name="android.permission.INTERNET" />
+
    <application
         android:label="GhibliPal"
         android:name="${applicationName}"
