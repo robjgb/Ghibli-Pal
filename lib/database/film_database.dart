@@ -1,6 +1,6 @@
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:ghibli_pal/movie.dart';
+import 'package:ghibli_pal/Models/movie.dart';
 
 class FilmDatabase {
   static final FilmDatabase instance = FilmDatabase._init();

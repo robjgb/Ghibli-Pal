@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
-import 'package:ghibli_pal/main.dart';
-import '../movie.dart';
+import '../Models/movie.dart';
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:ghibli_pal/Widgets/search_widget.dart';
-import 'package:ghibli_pal/film_detail.dart';
+import 'package:ghibli_pal/Pages/film_detail.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:scroll_snap_list/scroll_snap_list.dart';
 import 'package:ghibli_pal/database/film_database.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import 'Library.dart';
 
 int? isViewed;
 
@@ -47,13 +45,6 @@ class _HomeScreenState extends State<HomeScreen> {
   late List<Movie> moviesDB;
   bool doesExist = false;
 
-  void initState()  {
-    super.initState();
-    SchedulerBinding.instance?.addPostFrameCallback((_) {
-      print("SchedulerBinding");
-    });
-  }
-
   _onItemFocus(int index) async {
     doesExist = await FilmDatabase.instance.checkMovie(movies[index].title);
     setState(() {
@@ -70,8 +61,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget buildSearchBar() {
     return Container(
-          margin: const EdgeInsets.only(top:25),
-          width: 300,
+          margin: EdgeInsets.only(top:25.h),
+          height: 50.h,
+          width: 285.w,
           child: SearchWidget(
             text: query,
             hintText: 'Search Film Name...',
@@ -97,7 +89,7 @@ class _HomeScreenState extends State<HomeScreen> {
   // Movie Title
   Widget _buildItemTitle(){
     return Container(
-        width: 350,
+        width: 350.w,
         alignment: Alignment.bottomCenter,
         child: FittedBox(
           fit: BoxFit.scaleDown,
@@ -107,9 +99,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 : "",
             textAlign: TextAlign.center,
             style: GoogleFonts.montserrat(
-              textStyle: const TextStyle(
+              textStyle: TextStyle(
                 fontWeight: FontWeight.w500,
-                fontSize: 30,
+                fontSize: 30.sp,
               ),
             ),
           ),
@@ -124,31 +116,31 @@ class _HomeScreenState extends State<HomeScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(
-              height: 40,
+              height: 40.h,
               child: Text(
                 (movies.isNotEmpty && _focusedIndex <= movies.length)
                     ? "About \n"
                     : "",
                 style: GoogleFonts.montserrat(
-                  textStyle: const TextStyle(
+                  textStyle: TextStyle(
                     fontWeight: FontWeight.w500,
-                    fontSize: 24,
+                    fontSize: 24.sp,
                   ),
                 ),
               ),
             ),
             SizedBox(
-              height: 120,
-              width: 325,
+              height: 120.h,
+              width: 325.w,
               child: SingleChildScrollView(
                 child: Text(
                   (movies.isNotEmpty && _focusedIndex <= movies.length)
                       ? movies[_focusedIndex].description
                       : "",
                   style: GoogleFonts.montserrat(
-                    textStyle: const TextStyle(
+                    textStyle: TextStyle(
                       fontWeight: FontWeight.w400,
-                      fontSize: 12,
+                      fontSize: 12.sp,
                     ),
                   ),
                 ),
@@ -166,30 +158,19 @@ class _HomeScreenState extends State<HomeScreen> {
         child: CircularProgressIndicator(),
       );
     }
-    return SizedBox(
-      width: 200,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+    return Container(
+      width: 200.w,
+      alignment: Alignment.center,
+      child: Stack(
         children: [
-          Card(
-            color: Colors.grey.shade300,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(40.0),
-            ),
-            child: InkWell(
-              borderRadius: BorderRadius.circular(40.0),
-              onTap: () {
-                sslKey.currentState!.focusToItem(index);
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => FilmDetailPage(movies[index])));
-              },
-              child: Container(
+            Container(
+              height: 300.h,
                 decoration: BoxDecoration(
                   image: DecorationImage(
                     image: NetworkImage(movies[index].image),
+                    fit: BoxFit.fill,
                   ),
-                  borderRadius: BorderRadius.circular(40),
+                  borderRadius: BorderRadius.circular(40.r),
                   boxShadow: <BoxShadow>[
                     BoxShadow(
                       color: Colors.grey.shade400,
@@ -203,8 +184,22 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ],
                 ),
-                width: 250,
-                height: 285,
+              ),
+          Container(
+            height: 300.h,
+            child: Material(
+              color: Colors.transparent,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(40.0.r),
+              ),
+              child: InkWell(
+                borderRadius: BorderRadius.circular(40.0.r),
+                onTap: () {
+                  sslKey.currentState!.focusToItem(index);
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => FilmDetailPage(movies[index])));
+                },
               ),
             ),
           ),
@@ -243,7 +238,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           itemCount: movies.length,
                           onItemFocus: _onItemFocus,
                           itemBuilder: _buildItemList,
-                          itemSize: 200,
+                          itemSize: 200.w,
                           dynamicItemSize: true,
                         ),
                       ),
@@ -264,7 +259,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void addOrRemoveFilm() async {
-    await checkExists();
+     await checkExists();
 
     if (doesExist == false){
       addFilm();
@@ -289,10 +284,6 @@ class _HomeScreenState extends State<HomeScreen> {
     await FilmDatabase.instance.delete(id!);
   }
 
-  Future removeAllFilms() async{
-    await FilmDatabase.instance.deleteAll();
-  }
-
   Future checkExists() async{
     doesExist = await FilmDatabase.instance.checkMovie(movies[_focusedIndex].title);
     setState(() {
@@ -312,35 +303,100 @@ Widget _buildLibraryButton()  {
     future: checkExistsFuture(),
     initialData: false,
     builder: (context, snapshot){
-      if (snapshot.data!){
-        buttonLabel = 'Remove from library';
+      if (snapshot.hasError){
+        debugPrint('${snapshot.error}');
+        return const Center(
+          child: Text('An error has occurred, please restart the application.'),
+        );
       }
-      else{
-        buttonLabel = 'Add to library';
-      }
-      return SizedBox(
-        child: Container(
-          alignment: Alignment.centerRight,
-          padding: EdgeInsets.only(bottom: 25, right: 40),
-          child: ElevatedButton.icon(
-            onPressed: (){
-              addOrRemoveFilm();
-            },
-            label: Text(buttonLabel),
-            icon:  !snapshot.data!? Icon(Icons.add): Icon(Icons.delete),
-            style: ElevatedButton.styleFrom(
-              primary: const Color.fromRGBO(245, 245, 245, 1.0),
-              textStyle: TextStyle(
-                color: Colors.black,
-                fontSize: 10,
+      else if (snapshot.hasData){
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              padding: EdgeInsets.only(bottom: 25.h),
+              child: ElevatedButton.icon(
+                onPressed: (){
+                  addOrRemoveFilm();
+                },
+                label: !snapshot.data!? Text('Add to library'): Text('Remove from library'),
+                icon:  !snapshot.data!? Icon(Icons.add): Icon(Icons.delete),
+                style: ElevatedButton.styleFrom(
+                  primary: const Color.fromRGBO(245, 245, 245, 1.0),
+                  textStyle: TextStyle(
+                    color: Colors.black,
+                    fontSize: 10.sp,
+                  ),
+                ),
               ),
             ),
-          ),
-        ),
+            Container(
+              padding: EdgeInsets.only(bottom: 25.h, left: 10.w),
+              child: snapshot.data!? ElevatedButton.icon(
+                onPressed: (){
+                  _setFilmStatus();
+                },
+                label: Text('Edit status'),
+                icon:  Icon(Icons.edit),
+                style: ElevatedButton.styleFrom(
+                  primary: const Color.fromRGBO(245, 245, 245, 1.0),
+                  textStyle: TextStyle(
+                    color: Colors.black,
+                    fontSize: 10.sp,
+                  ),
+                ),
+              ) : Container(),
+            ),
+          ],
+        );
+      }
+      else{
+            return const Center(
+            child: CircularProgressIndicator(),
       );
+      }
     }
-
     );
+  }
+
+  Future<void> _setFilmStatus() async {
+    final movie = await FilmDatabase.instance.readMovie(movies[_focusedIndex].title);
+
+    switch (await showDialog<Movie>(
+        context: context,
+        builder: (BuildContext context) {
+          return SimpleDialog(
+            title: const Text('Select film watching status'),
+            children: <Widget>[
+              SimpleDialogOption(
+                onPressed: () async {
+                  movie.watch_status = 'Watching';
+                  await FilmDatabase.instance.update(movie);
+                  Navigator.pop(context); },
+                child: const Text('Watching'),
+              ),
+              SimpleDialogOption(
+                onPressed: () async {
+                  movie.watch_status = 'Watch Later';
+                  await FilmDatabase.instance.update(movie);
+                  Navigator.pop(context); },
+                child: const Text('Watch Later'),
+              ),
+              SimpleDialogOption(
+                onPressed: () async {
+                  movie.watch_status = 'Dropped';
+                  await FilmDatabase.instance.update(movie);
+                  Navigator.pop(context); },
+                child: const Text('Dropped'),
+              ),
+            ],
+          );
+        }
+    )) {
+      case null:
+      // dialog dismissed
+        break;
+    }
   }
 
 }

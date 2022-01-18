@@ -1,16 +1,21 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
-import 'package:ghibli_pal/onboarding_screen.dart';
+import 'package:ghibli_pal/Pages/onboarding_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'Pages/Home.dart';
 import 'Pages/Library.dart';
-import 'movie.dart';
+import 'Models/movie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:device_preview/device_preview.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 int? isViewed;
+final List<Widget> screens = [
+  HomeScreen(),
+  LibraryScreen(),
+];
 
 Future<List<Movie>> fetchMovies(http.Client client) async {
   final response = await client
@@ -55,16 +60,19 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context)  {
-    return MaterialApp(
-      // useInheritedMediaQuery: true,
-      // locale: DevicePreview.locale(context),
-      // builder: DevicePreview.appBuilder,
-      debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.lightBlue,
-    ),
-      home: isViewed !=0 ? OnboardingScreen() : const MyHomePage(title: "Home"),
+    return ScreenUtilInit(
+      designSize: const Size(390, 844),
+      builder: () => MaterialApp(
+        // useInheritedMediaQuery: true,
+        // locale: DevicePreview.locale(context),
+        // builder: DevicePreview.appBuilder,
+        debugShowCheckedModeBanner: false,
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          primarySwatch: Colors.lightBlue,
+      ),
+        home: isViewed !=0 ? OnboardingScreen() : const MyHomePage(title: "Home"),
+      ),
     );
   }
 }
@@ -80,11 +88,6 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _selectedIndex = 0;
-
-  final List<Widget> screens = [
-    HomeScreen(),
-    LibraryScreen(),
-  ];
 
   void _navigateBottomBar(int index){
     setState(() {

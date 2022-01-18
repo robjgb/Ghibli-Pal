@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SearchWidget extends StatefulWidget {
   final String text;
@@ -27,10 +28,10 @@ class _SearchWidgetState extends State<SearchWidget> {
 
     return Container(
       alignment: Alignment.center,
-      height: 42,
-      margin: const EdgeInsets.fromLTRB(16, 16, 16, 16),
+      height: 42.h,
+      margin: EdgeInsets.fromLTRB(16.w, 16.h, 16.w, 16.h),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(40),
+        borderRadius: BorderRadius.circular(40.r),
         color: Colors.white,
         boxShadow: <BoxShadow>[
           BoxShadow(
@@ -45,7 +46,7 @@ class _SearchWidgetState extends State<SearchWidget> {
           ),
         ],
       ),
-      padding: const EdgeInsets.symmetric(horizontal: 8),
+      padding: EdgeInsets.symmetric(horizontal: 8.w),
       child: TextField(
         controller: controller,
         decoration: InputDecoration(
