@@ -3,7 +3,7 @@
 A Studio Ghibli companion app made in Flutter
 
 ## Wireframes
-
+<img src="Digital Wireframe.png" width=600>
 
 
 ## User Stories: 
