@@ -33,16 +33,16 @@ Studio Ghibli is an anime film studio that creates beautifully detailed story fi
 | id | int  | unique id for each film when storing in database |
 | title | String  | unique title of each film |
 | original_title | String  | title of each film in original Japanese language |
-| original_title_romanised | String  | Romanised title of each film's original Japanese title |
-| image  | String  | Unique url link to an film poster image |
-| movie_banner  | String  | Unique url link to a background film banner image |
-| description  | String  | Unique url link to an film poster image |
-| director  | String  | Film director(s) |
-| producer  | String  | Film producer(s) |
-| release_date  | String  | Film year of release |
-| running_time  | String  | Film run time/ length formatted in minutes|
-| rt_score  | String  | Rotten Tomatoes film rating percentage |
-| watch_status  | String  | Current watch status set as either one of three 'Watching', 'Watch Later', 'Dropped' |
+| original_title_romanised | String  | romanised title of each film's original Japanese title |
+| image  | String  | unique url link to an film poster image |
+| movie_banner  | String  | unique url link to a background film banner image |
+| description  | String  | unique url link to an film poster image |
+| director  | String  | film director(s) |
+| producer  | String  | film producer(s) |
+| release_date  | String  | film year of release |
+| running_time  | String  | film run time/ length formatted in minutes|
+| rt_score  | String  | rotten Tomatoes film rating percentage |
+| watch_status  | String  | current watch status set as either one of three 'Watching', 'Watch Later', 'Dropped' |
 
 
 ### Networking
