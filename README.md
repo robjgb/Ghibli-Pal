@@ -2,15 +2,43 @@
 
 A Studio Ghibli companion app made in Flutter
 
-## Getting Started
+## Wireframes
 
-This project is a starting point for a Flutter application.
 
-A few resources to get you started if this is your first Flutter project:
+### User Stories: 
+**MVP Stories**
+- User can view a list of Studio Ghibli films.
+- Films are clickable to see details about each film.
+- Search bar to easily find films.
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+**Optional Stories**
+- Modern UI design. 
+- Library to store films.
+- Filter library by watch status. 
+- CRUD functionalities:
+  - Create a readable film using the Movie model and store in SQLite database. 
+  - Multiselect mode in grid view.
+  - Update watch status: (Watching, Watch Later, Dropped).
+  - Delete film.
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Schema 
+### Movie Model
+Movie
+| Property  | Type | Description |
+| ------------- | ------------- | -------------|
+| id | int  | unique id for each film when storing in database |
+| title | String  | unique title of each film |
+| original_title | String  | title of each film in original Japanese language |
+| original_title_romanised | String  | Romanised title of each film's original Japanese title |
+| image  | String  | Unique url link to an film poster image |
+| movie_banner  | String  | Unique url link to a background film banner image |
+| description  | String  | Unique url link to an film poster image |
+| director  | String  | Film director(s) |
+| producer  | String  | Film producer(s) |
+| release_date  | String  | Film year of release |
+| running_time  | String  | Film run time/ length formatted in minutes|
+| rt_score  | String  | Rotten Tomatoes film rating percentage |
+| watch_status  | String  | Current watch status set as either one of three 'Watching', 'Watch Later', 'Dropped' |
+
+
+
