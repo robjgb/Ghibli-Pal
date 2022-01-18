@@ -5,6 +5,9 @@ A Studio Ghibli companion app made in Flutter
 ### Description
 Studio Ghibli is an anime film studio that creates beautifully detailed story films. These films are good starter films for beginners who haven't seen much anime. This app can help people discover these beautiful classic films by Studio Ghibli and keep track of the films as they watch them. Information about each film is taken from the [Studio Ghibli API](https://ghibliapi.herokuapp.com/).
 
+### Download
+APK releases: https://drive.google.com/file/d/1yPwpbGEw3j1M2qUmJ7zlkBBCmDWuwtWh/view?usp=sharing
+
 ## Wireframe
 <img src="Digital Wireframe.png" width=600>
 
