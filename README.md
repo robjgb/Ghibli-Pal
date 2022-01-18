@@ -5,6 +5,7 @@ A Studio Ghibli companion app made in Flutter
 ## Wireframes
 
 
+
 ### User Stories: 
 **MVP Stories**
 - User can view a list of Studio Ghibli films.
@@ -21,9 +22,9 @@ A Studio Ghibli companion app made in Flutter
   - Update watch status: (Watching, Watch Later, Dropped).
   - Delete film.
 
+
 ## Schema 
 ### Movie Model
-Movie
 | Property  | Type | Description |
 | ------------- | ------------- | -------------|
 | id | int  | unique id for each film when storing in database |
@@ -40,5 +41,25 @@ Movie
 | rt_score  | String  | Rotten Tomatoes film rating percentage |
 | watch_status  | String  | Current watch status set as either one of three 'Watching', 'Watch Later', 'Dropped' |
 
+
+### Networking
+- Home Screen
+  - (HTTP GET) Query list of movies:
+     ```swift
+        Future<List<Movie>> fetchMovies(http.Client client) async {
+          final response = await client
+              .get(Uri.parse('https://ghibliapi.herokuapp.com/films'));
+
+          // Use the compute function to run parseMovies in a separate isolate.
+          return compute(parseMovies, response.body);
+        }
+
+        // Function converts a response body into a List<Movie>.
+        List<Movie> parseMovies(String responseBody) {
+          final parsed = jsonDecode(responseBody).cast<Map<String, dynamic>>();
+
+          return parsed.map<Movie>((json) => Movie.fromJson(json)).toList();
+        }
+     ```
 
 
