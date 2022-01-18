@@ -6,7 +6,7 @@ A Studio Ghibli companion app made in Flutter
 
 
 
-### User Stories: 
+## User Stories: 
 **MVP Stories**
 - User can view a list of Studio Ghibli films.
 - Films are clickable to see details about each film.
