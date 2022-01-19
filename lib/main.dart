@@ -1,36 +1,16 @@
-import 'dart:convert';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:ghibli_pal/Pages/onboarding_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'Pages/Home.dart';
 import 'Pages/Library.dart';
-import 'Models/movie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:device_preview/device_preview.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 int? isViewed;
 final List<Widget> screens = [
   HomeScreen(),
   LibraryScreen(),
 ];
-
-Future<List<Movie>> fetchMovies(http.Client client) async {
-  final response = await client
-      .get(Uri.parse('https://ghibliapi.herokuapp.com/films'));
-
-  // Use the compute function to run parseMovies in a separate isolate.
-  return compute(parseMovies, response.body);
-}
-
-// Function converts a response body into a List<Movie>.
-List<Movie> parseMovies(String responseBody) {
-  final parsed = jsonDecode(responseBody).cast<Map<String, dynamic>>();
-
-  return parsed.map<Movie>((json) => Movie.fromJson(json)).toList();
-}
 
 Future<void> main() async {
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
@@ -46,12 +26,8 @@ Future<void> main() async {
   debugPrint(prefs.getInt('onBoard').toString());
   isViewed = prefs.getInt('onBoard');
   runApp(
-      // DevicePreview(
-      //   enabled: !kReleaseMode,
-      //   builder: (context) =>
-        const MyApp(), // Wrap your app
-      // ),
-   );
+    const MyApp(), // Wrap your app
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -63,9 +39,6 @@ class MyApp extends StatelessWidget {
     return ScreenUtilInit(
       designSize: const Size(390, 844),
       builder: () => MaterialApp(
-        // useInheritedMediaQuery: true,
-        // locale: DevicePreview.locale(context),
-        // builder: DevicePreview.appBuilder,
         debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
         theme: ThemeData(
@@ -89,17 +62,17 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _selectedIndex = 0;
 
+  // Handles screen changing from bottom navigation bar
   void _navigateBottomBar(int index){
     setState(() {
-      screens.removeAt(1);
-      screens.insert(1, LibraryScreen(key: GlobalKey()));
+      screens.removeAt(1);                                // Refresh library on navigation
+      screens.insert(1, LibraryScreen(key: GlobalKey())); // to check updated CRUD status
       _selectedIndex = index;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       resizeToAvoidBottomInset : false,
       backgroundColor: const Color.fromRGBO(245, 245, 245, 1.0),

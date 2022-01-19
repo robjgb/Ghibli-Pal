@@ -68,6 +68,7 @@ class OnboardingScreen extends StatelessWidget {
     MaterialPageRoute(builder: (_) => const MyHomePage(title: 'Home Page',))
   );
 
+  // Set SharedPreferences that onboarding screen has already been viewed and doesn't show up again
   _storeOnboardInfo() async {
     int isViewed = 0;
     SharedPreferences prefs = await SharedPreferences.getInstance();

@@ -26,13 +26,14 @@ class _LibraryScreenState extends State<LibraryScreen> {
   List<int> selectedMoviesIndexes = [];
   bool itemsChosen = false;
 
-
+  // Initialize with refreshed movies in database
   @override
   void initState() {
     super.initState();
     refreshMovies();
   }
 
+  // Handle setState errors to prevent memory leak on navigation bar change
   @override
   void setState(fn) {
     if(mounted) {
@@ -40,6 +41,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
     }
   }
 
+  // Movie initialization for when filtering the movies with watch status
   setMovies() {
     if (movieInit == false) {
       movies = allMovies;
@@ -47,6 +49,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
     }
   }
 
+  // Refresh movie from database
   Future refreshMovies() async {
     setState(() => isLoading = true);
     this.allMovies = await FilmDatabase.instance.readAllMovies();
@@ -54,6 +57,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
     setState(() => isLoading = false);
   }
 
+  // Empty view when no films are found
   Widget _buildEmptyView() {
     return Container(
       padding: EdgeInsets.only(bottom: 120.h, left: 20.w, right: 20.w),
@@ -73,6 +77,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
     );
   }
 
+  // Library header with filter button
   Widget _buildHeader() {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -122,11 +127,14 @@ class _LibraryScreenState extends State<LibraryScreen> {
                       child: Text(value),
                     );
                   }).toList(),
-                  onChanged: (String? newValue) {
+                  onChanged: (String? newValue) async {
                     dropdownValue = newValue!;
                     if (dropdownValue == 'All Films') {
+                      allMovies = await FilmDatabase.instance.readAllMovies();
+                      movies = allMovies;
                       setState(() {
-                        movies = allMovies;
+                        selectedMoviesIndexes.clear();
+                        this.movies = movies;
                       });
                     }
                     else {
@@ -142,6 +150,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
     );
   }
 
+  // Filter film function based on watch status
   Future<void> filterFilm(String status) async {
     allMovies = await FilmDatabase.instance.readAllMovies();
     movies = allMovies.where((movie) {
@@ -154,6 +163,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
     });
   }
 
+  // Enable multiple select mode for CRUD functionalities
   void multipleSelect(int index) {
     if (multipleSelectEnabled) {
       setState(() {
@@ -175,6 +185,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
     }
   }
 
+  // Create grid view of movies
   Widget buildMovieGrid() {
     return
       GridView.builder(
@@ -237,11 +248,13 @@ class _LibraryScreenState extends State<LibraryScreen> {
       );
   }
 
+  // Handle changing amounts of films selected
   getSelectedCountText() {
     return selectedItem.isNotEmpty ? selectedItem.length.toString() +
         ' films selected' : 'Select films';
   }
 
+  // Edit film status function
   Future _setFilmStatus(String status) async {
     debugPrint('----------------');
     for (int i = 0; i < selectedMoviesIndexes.length; i++) {
@@ -263,6 +276,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
     });
   }
 
+  // Edit watch status dialog with options to change
   Future editMovies() async {
     switch (await showDialog<String>(
         context: context,
@@ -301,7 +315,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
     }
   }
 
-
+  // Delete currently selected movies
   Future deleteMovies() async {
     showDialog<String>(
       context: context,
@@ -344,6 +358,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
     );
   }
 
+  // Root scaffold, handle enable or disable appbar, expanded containers of each widget
   @override
   Widget build(BuildContext context) {
     return Scaffold(

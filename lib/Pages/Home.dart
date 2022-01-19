@@ -36,22 +36,24 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int _focusedIndex = 0;
-  List<Movie> allMovies = <Movie>[];
-  List<Movie> movies = <Movie>[];
-  String query = '';
+  int _focusedIndex = 0; // Track focused movie index (current snapped movie in listview)
+  List<Movie> allMovies = <Movie>[]; // All movies
+  List<Movie> movies = <Movie>[]; // Changeable list of movies for searching
+  String query = ''; // Empty Search query
+  GlobalKey<ScrollSnapListState> sslKey = GlobalKey(); // Key to change focused movie
+  late List<Movie> moviesDB; // List of movies from database to track CRUD status
+  late String buttonLabel; // Library button labels changed from CRUD status
   bool movieInit = false;
-  GlobalKey<ScrollSnapListState> sslKey = GlobalKey();
-  late List<Movie> moviesDB;
   bool doesExist = false;
 
   _onItemFocus(int index) async {
-    doesExist = await FilmDatabase.instance.checkMovie(movies[index].title);
+    // doesExist = await FilmDatabase.instance.checkMovie(movies[index].title);
     setState(() {
       _focusedIndex = index;
     });
   }
 
+  // Initialize movies separate from search filter movies
   setMovies() {
     if (movieInit == false){
       movies = allMovies;
@@ -59,6 +61,7 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  // Search bar widget
   Widget buildSearchBar() {
     return Container(
           margin: EdgeInsets.only(top:25.h),
@@ -72,6 +75,7 @@ class _HomeScreenState extends State<HomeScreen> {
         );
   }
 
+  // Search function that uses editable list of movies
   void searchFilm(String query) {
     _focusedIndex = 0;
     sslKey.currentState!.focusToItem(_focusedIndex);
@@ -258,6 +262,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  // Add or remove film from database
   void addOrRemoveFilm() async {
      await checkExists();
 
@@ -271,12 +276,14 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  // Add film to database
   Future addFilm() async {
    final movie = movies[_focusedIndex];
    movie.watch_status = "Watching";
    await FilmDatabase.instance.create(movie);
   }
 
+  // Remove film from database
   Future removeFilm() async{
     String title = movies[_focusedIndex].title;
     Movie movie = await FilmDatabase.instance.readMovie(title);
@@ -284,6 +291,7 @@ class _HomeScreenState extends State<HomeScreen> {
     await FilmDatabase.instance.delete(id!);
   }
 
+  // Check if film already exists in database
   Future checkExists() async{
     doesExist = await FilmDatabase.instance.checkMovie(movies[_focusedIndex].title);
     setState(() {
@@ -291,13 +299,13 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  // Future builder bool function for building the library button on response from database
   Future<bool> checkExistsFuture() async{
     bool result =  await FilmDatabase.instance.checkMovie(movies[_focusedIndex].title);
     return result;
   }
 
-  late String buttonLabel;
-
+  // Create the add to library/ remove or edit button
 Widget _buildLibraryButton()  {
   return FutureBuilder<bool>(
     future: checkExistsFuture(),
@@ -359,6 +367,7 @@ Widget _buildLibraryButton()  {
     );
   }
 
+  // Function for changing film status in database, creates a dialog of options
   Future<void> _setFilmStatus() async {
     final movie = await FilmDatabase.instance.readMovie(movies[_focusedIndex].title);
 

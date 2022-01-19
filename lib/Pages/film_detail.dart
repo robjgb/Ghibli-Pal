@@ -12,6 +12,8 @@ class FilmDetailPage extends StatefulWidget {
 }
 
 class _FilmDetailPageState extends State<FilmDetailPage> {
+
+  // Scaffold that takes information from the Movie object stored in "var filmDetails" and displays it as a film detail page.
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -101,7 +103,6 @@ class _FilmDetailPageState extends State<FilmDetailPage> {
             ),
           ),
 
-
           Container(
             height: 50.h,
             width: 300.w,
@@ -131,7 +132,6 @@ class _FilmDetailPageState extends State<FilmDetailPage> {
             ),
           ),
 
-
           Container(
             height: 50.h,
             width: 300.w,
@@ -157,7 +157,6 @@ class _FilmDetailPageState extends State<FilmDetailPage> {
               ],
             ),
           ),
-
 
           Container(
             height: 50.h,
